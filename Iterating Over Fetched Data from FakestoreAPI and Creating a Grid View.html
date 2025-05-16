@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>FakeStore Products</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f4f4f4;
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .product {
+      background: rgb(252, 94, 142);
+      padding: 15px;
+      border-radius: 8px;
+      border: 3px solid;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s;
+    }
+
+    .product:hover {
+      transform: scale(1.03);
+    }
+
+    .product img {
+      width: 100%;
+      height: 200px;
+      object-fit: contain;
+      margin-bottom: 10px;
+    }
+
+    .product-title {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .product-price {
+      font-size: 14px;
+      color: #333;
+    }
+
+    .green-border {
+      border-color: green;
+    }
+
+    .yellow-border {
+      border-color: goldenrod;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>FakeStore Products</h2>
+  <div class="grid" id="productGrid"></div>
+
+  <script>
+    const grid = document.getElementById("productGrid");
+
+    fetch('https://fakestoreapi.com/products')
+      .then(response => response.json())
+      .then(products => {
+        products.forEach(product => {
+          const item = document.createElement("div");
+          item.classList.add("product");
+          if (product.price > 50) {
+            item.classList.add("yellow-border");
+          } else {
+            item.classList.add("green-border");
+          }
+
+          item.innerHTML = `
+            <img src="${product.image}" alt="${product.title}">
+            <div class="product-title">${product.title}</div>
+            <div class="product-price">$${product.price.toFixed(2)}</div>
+          `;
+
+          grid.appendChild(item);
+        });
+      })
+      .catch(error => {
+        console.error("Error fetching products:", error);
+      });
+  </script>
+
+</body>
+</html>
